@@ -2,8 +2,11 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Auth\Access\AuthorizationException;
+use Spatie\Permission\Exceptions\UnauthorizedException; // <--- ADD THIS LINE
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +29,21 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+    public function render($request, Throwable $exception)
+    {
+
+        // Prioritize catching Spatie's specific exception
+        if ($exception instanceof UnauthorizedException) {
+            return redirect('/');
+        }
+
+        // If it's a general AuthorizationException (e.g., from Laravel's Gates/Policies directly)
+        // This line might still be hit if not caught by UnauthorizedException,
+        // but putting UnauthorizedException first ensures it's handled.
+        if ($exception instanceof AuthorizationException) {
+            return redirect('/');
+        }
+        return parent::render($request, $exception);
     }
 }
