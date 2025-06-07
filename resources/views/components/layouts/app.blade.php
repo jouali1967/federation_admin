@@ -129,7 +129,7 @@
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
               <img src="{{ asset('dist/assets/img/user2-160x160.jpg') }}" class="user-image rounded-circle shadow"
                 alt="User Image" />
-              <span class="d-none d-md-inline">Alexander Pierce</span>
+              <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
               <!--begin::User Image-->
@@ -171,11 +171,11 @@
         <!--begin::Brand Link-->
         <a href="#" class="brand-link">
           <!--begin::Brand Image-->
-          <img src="{{ asset('dist/assets/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-            class="brand-image opacity-75 shadow" />
+          {{-- <img src="{{ asset('dist/assets/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
+            class="brand-image opacity-75 shadow" /> --}}
           <!--end::Brand Image-->
           <!--begin::Brand Text-->
-          <span class="brand-text fw-light">jouali</span>
+          <span class="brand-text fw-light">FEDERATION</span>
           <!--end::Brand Text-->
         </a>
         <!--end::Brand Link-->
