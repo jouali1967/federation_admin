@@ -57,7 +57,7 @@
               <label for="newUserRolesSelect" class="form-label">Assign Roles:</label>
               <select wire:model="newUserRoles" id="newUserRolesSelect" class="form-select" multiple>
                 @foreach ($roles as $role)
-                  <option value="{{ $role->id }}">{{ $role->name }}</option>
+                <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endforeach
               </select>
               @error('newUserRoles') <div class="text-danger mt-1">{{ $message}}</div> @enderror
@@ -77,8 +77,8 @@
 
   {{-- Modal for editing user --}}
   @if($showEditUserModal)
-  <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog"
-    aria-labelledby="editUserModalLabel" aria-hidden="false">
+  <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog" aria-labelledby="editUserModalLabel"
+    aria-hidden="false">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <form wire:submit.prevent="updateUser">
@@ -89,22 +89,24 @@
           <div class="modal-body">
             <div class="mb-3">
               <label for="editingUserName" class="form-label">Nom</label>
-              <input type="text" class="form-control @error('editingUserName') is-invalid @enderror" id="editingUserName"
-                wire:model.defer="editingUserName">
+              <input type="text" class="form-control @error('editingUserName') is-invalid @enderror"
+                id="editingUserName" wire:model.defer="editingUserName">
               @error('editingUserName') <span class="invalid-feedback">{{ $message}}</span> @enderror
             </div>
             <div class="mb-3">
               <label for="editingUserEmail" class="form-label">Email</label>
-              <input type="email" class="form-control @error('editingUserEmail') is-invalid @enderror" id="editingUserEmail"
-                wire:model.defer="editingUserEmail">
+              <input type="email" class="form-control @error('editingUserEmail') is-invalid @enderror"
+                id="editingUserEmail" wire:model.defer="editingUserEmail">
               @error('editingUserEmail') <span class="invalid-feedback">{{ $message}}</span> @enderror
             </div>
             <div class="mb-3">
-              <label for="editingUserPassword" class="form-label">Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+              <label for="editingUserPassword" class="form-label">Nouveau mot de passe (laisser vide pour ne pas
+                changer)</label>
               <div class="input-group">
-                <input type="password" class="form-control @error('editingUserPassword') is-invalid @enderror" id="editingUserPassword"
-                  wire:model.defer="editingUserPassword">
-                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility(this, 'editingUserPassword')">
+                <input type="password" class="form-control @error('editingUserPassword') is-invalid @enderror"
+                  id="editingUserPassword" wire:model.defer="editingUserPassword">
+                <button class="btn btn-outline-secondary" type="button"
+                  onclick="togglePasswordVisibility(this, 'editingUserPassword')">
                   <i class="bi bi-eye"></i>
                 </button>
               </div>
@@ -115,9 +117,10 @@
               <div class="input-group">
                 <input type="password" class="form-control" id="editingUserPassword_confirmation"
                   wire:model.defer="editingUserPassword_confirmation">
-                  <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility(this, 'editingUserPassword_confirmation')">
-                    <i class="bi bi-eye"></i>
-                  </button>
+                <button class="btn btn-outline-secondary" type="button"
+                  onclick="togglePasswordVisibility(this, 'editingUserPassword_confirmation')">
+                  <i class="bi bi-eye"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -154,7 +157,7 @@
               Éditer les rôles
             </button>
             <button class="btn btn-secondary btn-sm" wire:click="openEditUserModal({{ $user->id }})">
-                Modifier
+              Modifier
             </button>
           </td>
         </tr>
@@ -197,51 +200,47 @@
   @endif
   @script()
   <script>
-$(document).ready(function(){
-    function loadJavascript() {
-      // Handling for #newUserRolesSelect
-      const newUserRolesSelect = $('#newUserRolesSelect');
-      if (newUserRolesSelect.length) {
-        if (newUserRolesSelect.hasClass("select2-hidden-accessible")) {
+    $(document).ready(function(){
+      function loadJavascript() {
+        const newUserRolesSelect = $('#newUserRolesSelect');
+        if (newUserRolesSelect.length) {
+          if (newUserRolesSelect.hasClass("select2-hidden-accessible")) {
             newUserRolesSelect.select2('destroy');
-        }
-        newUserRolesSelect.select2({
-            dropdownParent: newUserRolesSelect.closest('.modal-body'),
-            placeholder: 'Select roles' // Optional: adds a placeholder
+          }
+          newUserRolesSelect.select2({
+          dropdownParent: newUserRolesSelect.closest('.modal-body'),
+          placeholder: 'Select roles' // Optional: adds a placeholder
         }).on('change', function() {
             $wire.set('newUserRoles', $(this).val());
-        });
+          });
+        }
       }
-    }
-
-    loadJavascript(); // Initialise au chargement de la page
-
-    Livewire.hook('morphed', () => {
-       loadJavascript(); // Réinitialise après un DOM morph (submit, update)
-    });
-
-    Livewire.on('userManagementModalOpened', () => {
-        loadJavascript();
-    });
-})
+      loadJavascript(); // Initialise au chargement de la page
+      Livewire.hook('morphed', () => {
+        loadJavascript(); // Réinitialise après un DOM morph (submit, update)
+      });
+      Livewire.on('userManagementModalOpened', () => {
+          loadJavascript();
+      });
+    })
   </script>
   @endscript
 
-@push('scripts')
-<script>
-  function togglePasswordVisibility(button, fieldId) {
-    const field = document.getElementById(fieldId);
-    const icon = button.querySelector('i');
-    if (field.type === 'password') {
-      field.type = 'text';
-      icon.classList.remove('bi-eye');
-      icon.classList.add('bi-eye-slash');
-    } else {
-      field.type = 'password';
-      icon.classList.remove('bi-eye-slash');
-      icon.classList.add('bi-eye');
+  @push('scripts')
+  <script>
+    function togglePasswordVisibility(button, fieldId) {
+      const field = document.getElementById(fieldId);
+      const icon = button.querySelector('i');
+      if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.remove('bi-eye');
+        icon.classList.add('bi-eye-slash');
+      } else {
+        field.type = 'password';
+        icon.classList.remove('bi-eye-slash');
+        icon.classList.add('bi-eye');
+      }
     }
-  }
-</script>
-@endpush
+  </script>
+  @endpush
 </div>

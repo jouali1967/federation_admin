@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Administration</title>
     <link rel="stylesheet" href="{{ asset('assets/bootstrap-icons/bootstrap-icons.min.css') }}"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.css') }}" />
     <link href="{{ asset('dist/css/select2.min.css') }}" rel="stylesheet" />
 
@@ -19,12 +18,15 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.users') }}">Gestion des utilisateurs</a>
+                        <a class="nav-link" href="http://localhost/newproject/public">Retour à la racine</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.roles') }}">Gestion des rôles</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="nav-link btn btn-link text-white">Déconnexion</button>
+                        </form>
                     </li>
                 </ul>
             </div>
