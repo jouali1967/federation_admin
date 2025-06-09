@@ -101,9 +101,9 @@ class DynamicSidebar extends Component
                     'icon' => 'bi bi-printer-fill',
                     'route_group_pattern' => 'editions.*',
                     'items' => [
-                        'editions.employes' => ['title' => 'Employés (Edition)'],
-                        'editions.pdf' => ['title' => 'PDF (Edition)'],
-                        'editions.declares' => ['title' => 'Déclarés (Edition)'],
+                        'editions.employes' => ['title' => 'Liste Employés (PDF)'],
+                        'editions.pdf' => ['title' => 'Demande Virement (PDF)'],
+                        'editions.declares' => ['title' => 'Liste Déclarés (PDF)'],
                     ],
                     'order' => 8,
                 ],
