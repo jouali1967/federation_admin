@@ -23,6 +23,14 @@ class UserManagement extends Component
     public $newUserRoles = []; // Sera un tableau d'ID de rôles
     public bool $showCreateUserModal = false;
 
+    // Properties for edit user modal
+    public ?User $editingUser = null;
+    public bool $showEditUserModal = false;
+    public $editingUserName = '';
+    public $editingUserEmail = '';
+    public $editingUserPassword = '';
+    public $editingUserPassword_confirmation = '';
+
     public function mount()
     {
         $this->users = User::with('roles')->get();
@@ -61,6 +69,53 @@ class UserManagement extends Component
     {
         $this->selectedUser = null;
         $this->selectedRoles = [];
+    }
+
+    public function openEditUserModal($userId)
+    {
+        $this->editingUser = User::find($userId);
+        if($this->editingUser) {
+            $this->editingUserName = $this->editingUser->name;
+            $this->editingUserEmail = $this->editingUser->email;
+            $this->showEditUserModal = true;
+        }
+    }
+
+    public function closeEditUserModal()
+    {
+        $this->showEditUserModal = false;
+        $this->editingUser = null;
+        $this->editingUserName = '';
+        $this->editingUserEmail = '';
+        $this->editingUserPassword = '';
+        $this->editingUserPassword_confirmation = '';
+        $this->resetErrorBag();
+    }
+
+    public function updateUser()
+    {
+        if ($this->editingUser) {
+            $validatedData = $this->validate([
+                'editingUserName' => 'required|string|max:255',
+                'editingUserEmail' => 'required|string|email|max:255|unique:users,email,' . $this->editingUser->id,
+                'editingUserPassword' => ['nullable', 'string', Password::min(8), 'confirmed'],
+            ]);
+
+            $this->editingUser->update([
+                'name' => $validatedData['editingUserName'],
+                'email' => $validatedData['editingUserEmail'],
+            ]);
+
+            if (!empty($validatedData['editingUserPassword'])) {
+                $this->editingUser->update([
+                    'password' => Hash::make($validatedData['editingUserPassword']),
+                ]);
+            }
+
+            session()->flash('message', 'Utilisateur mis à jour avec succès.');
+            $this->closeEditUserModal();
+            $this->users = User::with('roles')->get(); // Refresh users list
+        }
     }
 
     // Méthodes pour le modal de création d'utilisateur

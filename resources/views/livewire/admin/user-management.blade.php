@@ -75,6 +75,64 @@
   @endif
   {{-- Fin Modal de création --}}
 
+  {{-- Modal for editing user --}}
+  @if($showEditUserModal)
+  <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog"
+    aria-labelledby="editUserModalLabel" aria-hidden="false">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <form wire:submit.prevent="updateUser">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editUserModalLabel">Modifier l'utilisateur</h5>
+            <button type="button" class="btn-close" wire:click="closeEditUserModal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="editingUserName" class="form-label">Nom</label>
+              <input type="text" class="form-control @error('editingUserName') is-invalid @enderror" id="editingUserName"
+                wire:model.defer="editingUserName">
+              @error('editingUserName') <span class="invalid-feedback">{{ $message}}</span> @enderror
+            </div>
+            <div class="mb-3">
+              <label for="editingUserEmail" class="form-label">Email</label>
+              <input type="email" class="form-control @error('editingUserEmail') is-invalid @enderror" id="editingUserEmail"
+                wire:model.defer="editingUserEmail">
+              @error('editingUserEmail') <span class="invalid-feedback">{{ $message}}</span> @enderror
+            </div>
+            <div class="mb-3">
+              <label for="editingUserPassword" class="form-label">Nouveau mot de passe (laisser vide pour ne pas changer)</label>
+              <div class="input-group">
+                <input type="password" class="form-control @error('editingUserPassword') is-invalid @enderror" id="editingUserPassword"
+                  wire:model.defer="editingUserPassword">
+                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility(this, 'editingUserPassword')">
+                  <i class="bi bi-eye"></i>
+                </button>
+              </div>
+              @error('editingUserPassword') <span class="invalid-feedback d-block">{{ $message}}</span> @enderror
+            </div>
+            <div class="mb-3">
+              <label for="editingUserPassword_confirmation" class="form-label">Confirmer le nouveau mot de passe</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="editingUserPassword_confirmation"
+                  wire:model.defer="editingUserPassword_confirmation">
+                  <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility(this, 'editingUserPassword_confirmation')">
+                    <i class="bi bi-eye"></i>
+                  </button>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" wire:click="closeEditUserModal">Fermer</button>
+            <button type="submit" class="btn btn-primary">Sauvegarder les modifications</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show" style="display: @if($showEditUserModal) block @else none @endif;"></div>
+  @endif
+  {{-- End of edit user modal --}}
+
   <div class="table-responsive">
     <table class="table table-striped table-bordered tabele-sm">
       <thead>
@@ -94,6 +152,9 @@
           <td>
             <button class="btn btn-primary btn-sm" wire:click="editUser({{ $user->id }})">
               Éditer les rôles
+            </button>
+            <button class="btn btn-secondary btn-sm" wire:click="openEditUserModal({{ $user->id }})">
+                Modifier
             </button>
           </td>
         </tr>
@@ -165,3 +226,22 @@ $(document).ready(function(){
 })
   </script>
   @endscript
+
+@push('scripts')
+<script>
+  function togglePasswordVisibility(button, fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = button.querySelector('i');
+    if (field.type === 'password') {
+      field.type = 'text';
+      icon.classList.remove('bi-eye');
+      icon.classList.add('bi-eye-slash');
+    } else {
+      field.type = 'password';
+      icon.classList.remove('bi-eye-slash');
+      icon.classList.add('bi-eye');
+    }
+  }
+</script>
+@endpush
+</div>
