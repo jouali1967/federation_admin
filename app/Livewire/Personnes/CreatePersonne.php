@@ -4,78 +4,112 @@ namespace App\Livewire\Personnes;
 
 use Livewire\Component;
 use App\Models\Personne;
+use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\DB;
 
 class CreatePersonne extends Component
 {
-  public $nom;
-  public $prenom;
-  public $phone;
-  public $adresse;
-  public $date_embauche;
+#[Rule('required', message: 'Le champ nom est obligatoire.')]
+#[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Le nom doit contenir uniquement des majuscules, des chiffres et des espaces.')]
+public $nom;
+#[Rule('required', message: 'Le champ prenom est obligatoire.')]
+#[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Le prenom doit contenir uniquement des majuscules, des chiffres et des espaces.')] 
+public $prenom;
+#[Rule('required', message: 'N° telephone est obligatoire.')]
+#[Rule('numeric', message: 'Le numéro de téléphone ne doit contenir que des chiffres.')]  
+public $phone;
+#[Rule('required', message: 'Le champ adresse est obligatoire.')]
+
+#[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Adresse doit contenir uniquement des majuscules, des chiffres et des espaces.')] 
+public $adresse;
+#[Rule('required', message: "La date d'embauche est obligatoire.")]
+// Vous voudrez sûrement aussi valider le format de la date
+#[Rule('date_format:d/m/Y', message: "Le format de la date doit être JJ/MM/AAAA.")]
+public $date_embauche;
+#[Rule('required', message: "La date naissance est obligatoire.")]
+#[Rule('date_format:d/m/Y', message: "Le format de la date doit être JJ/MM/AAAA.")]
   public $date_nais;
+  #[Rule('required', message: 'Sexe est obligatoire')]
+
   public $sexe;
+  #[Rule('required', message: 'Situation famille est obligatoire')]
+
   public $sit_fam;
+  #[Rule('required', message: 'Email est obligatoire')]
+
   public $email;
+  #[Rule('required', message: 'Fonction est obligatoire')]
+
   public $fonction;
+  #[Rule('required', message: 'Banque est obligatoire')]
+
   public $banque;
+  #[Rule('required', message: 'N° compte est obligatoire')]
+
   public $num_compte;
+  #[Rule('required', message: 'Salaire est obligatoire')]
+
   public $salaire_base;
+#[Rule('required', message: 'Le champ cin est obligatoire.')]
+#[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Le cin doit contenir uniquement des majuscules, des chiffres et des espaces.')] 
+
   public $cin;
+  #[Rule('required', message: 'Categorieest obligatoire')]
+
   public $categ;
 
-  protected $rules = [
-    'nom' => 'required',
-    'prenom' => 'required',
-    'phone' => 'required|regex:/^[0-9]{10}$/',
-    'adresse' => 'required',
-    'date_embauche' => 'required|date_format:d/m/Y',
-    'date_nais' => 'nullable|date_format:d/m/Y',
-    'sexe' => 'required|in:M,F',
-    'sit_fam' => 'required|in:M,C,D',
-    'email' => 'nullable|email',
-    'fonction' => 'required',
-    'banque' => 'required',
-    'num_compte' => 'required',
-    'salaire_base' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-    'cin' => 'required|regex:/^[A-Z0-9]$/',
-    'categ' => 'required|in:categorie1,categorie2,categorie3'
-  ];
+  // protected $rules = [
+  //   'nom' => 'required',
+  //   'prenom' => 'required',
+  //   'phone' => 'required|regex:/^[0-9]{10}$/',
+  //   'adresse' => 'required',
+  //   'date_embauche' => 'required|date_format:d/m/Y',
+  //   'date_nais' => 'nullable|date_format:d/m/Y',
+  //   'sexe' => 'required|in:M,F',
+  //   'sit_fam' => 'required|in:M,C,D',
+  //   'email' => 'nullable|email',
+  //   'fonction' => 'required',
+  //   'banque' => 'required',
+  //   'num_compte' => 'required',
+  //   'salaire_base' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+  //   'cin' => 'required|regex:/^[A-Z0-9]$/',
+  //   'categ' => 'required|in:categorie1,categorie2,categorie3'
+  // ];
 
-  protected $messages = [
-    'nom.required' => 'Le nom est obligatoire',
-    'prenom.required' => 'Le prénom est obligatoire',
-    'phone.required' => 'Le téléphone est obligatoire',
-    'phone.regex' => 'Le numéro de téléphone doit contenir 10 chiffres',
-    'adresse.required' => 'L\'adresse est obligatoire',
-    'date_embauche.required' => 'La date d\'embauche est obligatoire',
-    'date_embauche.date_format' => 'La date d\'embauche doit être au format JJ/MM/AAAA',
-    'date_nais.date_format' => 'La date de naissance doit être au format JJ/MM/AAAA',
-    'sexe.required' => 'Le sexe est obligatoire',
-    'sexe.in' => 'Le sexe doit être M ou F',
-    'sit_fam.required' => 'La situation familiale est obligatoire',
-    'sit_fam.in' => 'La situation familiale doit être M, C ou D',
-    'email.email' => 'L\'email doit être une adresse email valide',
-    'fonction.required' => 'La fonction est obligatoire',
-    'banque.required' => 'La banque est obligatoire',
-    'num_compte.required' => 'Le numéro de compte est obligatoire',
-    'salaire_base.required' => 'Le salaire de base est obligatoire',
-    'salaire_base.numeric' => 'Le salaire de base doit être un nombre',
-    'salaire_base.regex' => 'Le salaire de base doit avoir au maximum 2 chiffres après la virgule',
-    'cin.required' => 'Le CIN est obligatoire',
-    'cin.regex' => 'Le CIN doit être alphanumérique et ne pas contenir de caractères spéciaux',
-    'categ.required' => 'La catégorie est obligatoire',
-    'categ.in' => 'La catégorie doit être l\'une des valeurs suivantes : categorie1, categorie2, categorie3'
-  ];
+  // protected $messages = [
+  //   'nom.required' => 'Le nom est obligatoire',
+  //   'prenom.required' => 'Le prénom est obligatoire',
+  //   'phone.required' => 'Le téléphone est obligatoire',
+  //   'phone.regex' => 'Le numéro de téléphone doit contenir 10 chiffres',
+  //   'adresse.required' => 'L\'adresse est obligatoire',
+  //   'date_embauche.required' => 'La date d\'embauche est obligatoire',
+  //   'date_embauche.date_format' => 'La date d\'embauche doit être au format JJ/MM/AAAA',
+  //   'date_nais.date_format' => 'La date de naissance doit être au format JJ/MM/AAAA',
+  //   'sexe.required' => 'Le sexe est obligatoire',
+  //   'sexe.in' => 'Le sexe doit être M ou F',
+  //   'sit_fam.required' => 'La situation familiale est obligatoire',
+  //   'sit_fam.in' => 'La situation familiale doit être M, C ou D',
+  //   'email.email' => 'L\'email doit être une adresse email valide',
+  //   'fonction.required' => 'La fonction est obligatoire',
+  //   'banque.required' => 'La banque est obligatoire',
+  //   'num_compte.required' => 'Le numéro de compte est obligatoire',
+  //   'salaire_base.required' => 'Le salaire de base est obligatoire',
+  //   'salaire_base.numeric' => 'Le salaire de base doit être un nombre',
+  //   'salaire_base.regex' => 'Le salaire de base doit avoir au maximum 2 chiffres après la virgule',
+  //   'cin.required' => 'Le CIN est obligatoire',
+  //   'cin.regex' => 'Le CIN doit être alphanumérique et ne pas contenir de caractères spéciaux',
+  //   'categ.required' => 'La catégorie est obligatoire',
+  //   'categ.in' => 'La catégorie doit être l\'une des valeurs suivantes : categorie1, categorie2, categorie3'
+  // ];
 
-  public function updated($propertyName)
-  {
-    $this->validateOnly($propertyName);
-  }
+  // public function updated($propertyName)
+  // {
+  //   $this->validateOnly($propertyName);
+  // }
 
   public function render()
   {
-/*$personnes = Personne::select('id','nom', 'prenom') // Manque l'ID !
+    /*$personnes = Personne::select('id','nom', 'prenom') // Manque l'ID !
     ->with('inscriptions:id,personne_id,num_cnss')
     ->withCount('enfants')
     ->get();
@@ -83,7 +117,7 @@ class CreatePersonne extends Component
     $numCnss = $personne->inscriptions->first()->num_cnss ?? 'Non inscrit';
     echo $personne->nom . ' ' . $personne->prenom . ' - CNSS: ' . $numCnss . ' - Enfants: ' . $personne->enfants_count . PHP_EOL;
 }*/
-/*$personnes = Personne::select('id','nom', 'prenom')
+    /*$personnes = Personne::select('id','nom', 'prenom')
     ->with('inscriptions:id,personne_id,num_cnss')
     ->with(['declarations' => function ($query) {
         $query->select('id', 'personne_id', 'mont_dec', 'date_dec')

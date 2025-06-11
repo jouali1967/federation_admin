@@ -53,20 +53,20 @@
 
               <!-- Date de naissance et Téléphone -->
               <div class="row g-2">
-                <div class="col-md-4">
+                <div class="col-md-4 ">
                   <div class="form-group mb-2">
                     <label for="date_nais" class="form-label mb-1">Date de naissance</label>
                     <div class="input-group input-group-sm">
                       <span class="input-group-text bg-light">
                         <i class="fas fa-calendar"></i>
                       </span>
-                      <input type="text" wire:model='date_nais' id="date_nais_picker"
+                      <input type="text" id="date_nais_picker"
                         class='form-control @error("date_nais") is-invalid @enderror' placeholder="JJ/MM/AAAA">
                     </div>
-                    @error('date_nais')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                   </div>
+                  @error('date_nais')
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
+                  @enderror
                 </div>
                 <div class="col-md-4">
                   <div class="form-group mb-2">
@@ -330,13 +330,13 @@
                       <span class="input-group-text bg-light">
                         <i class="fas fa-calendar"></i>
                       </span>
-                      <input type="text" wire:model='date_embauche' id="datepicker"
+                      <input type="text" id="datepicker"
                         class='form-control @error("date_embauche") is-invalid @enderror' placeholder="JJ/MM/AAAA">
                     </div>
-                    @error('date_embauche')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
                   </div>
+                  @error('date_embauche')
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
+                  @enderror
                 </div>
 
                 <div class="col-md-6">
@@ -380,15 +380,17 @@
     $(document).ready(function(){
       flatpickr("#datepicker", {
         dateFormat: "d/m/Y",
+        allowInput: true,
         onChange: function(selectedDates, dateStr) {
-          $wire.set('date_embauche', dateStr);
+          $wire.set('date_embauche', dateStr === null ? '' : dateStr);
         }
       });
 
       flatpickr("#date_nais_picker", {
         dateFormat: "d/m/Y",
+        allowInput: true,
         onChange: function(selectedDates, dateStr) {
-          $wire.set('date_nais', dateStr);
+          $wire.set('date_nais', dateStr === null ? '' : dateStr);
         }
       });
     })
