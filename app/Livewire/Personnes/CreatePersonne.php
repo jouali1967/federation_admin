@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Personnes;
 
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use App\Models\Personne;
 use Livewire\Attributes\Rule;
@@ -9,25 +10,23 @@ use Illuminate\Support\Facades\DB;
 
 class CreatePersonne extends Component
 {
-#[Rule('required', message: 'Le champ nom est obligatoire.')]
-#[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Le nom doit contenir uniquement des majuscules, des chiffres et des espaces.')]
-public $nom;
-#[Rule('required', message: 'Le champ prenom est obligatoire.')]
-#[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Le prenom doit contenir uniquement des majuscules, des chiffres et des espaces.')] 
-public $prenom;
-#[Rule('required', message: 'N° telephone est obligatoire.')]
-#[Rule('numeric', message: 'Le numéro de téléphone ne doit contenir que des chiffres.')]  
-public $phone;
-#[Rule('required', message: 'Le champ adresse est obligatoire.')]
-
-#[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Adresse doit contenir uniquement des majuscules, des chiffres et des espaces.')] 
-public $adresse;
-#[Rule('required', message: "La date d'embauche est obligatoire.")]
-// Vous voudrez sûrement aussi valider le format de la date
-#[Rule('date_format:d/m/Y', message: "Le format de la date doit être JJ/MM/AAAA.")]
-public $date_embauche;
-#[Rule('required', message: "La date naissance est obligatoire.")]
-#[Rule('date_format:d/m/Y', message: "Le format de la date doit être JJ/MM/AAAA.")]
+  #[Validate('required', message: 'Le nom est obligatoire.')]
+  #[Validate('regex:/^[A-Z0-9\s]+$/', message: 'Le nom doit contenir uniquement des majuscules, des chiffres et des espaces.')]
+  public $nom;
+  #[Rule('required', message: 'Le prenom est obligatoire.')]
+  #[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Le prenom doit contenir uniquement des majuscules, des chiffres et des espaces.')] 
+  public $prenom;
+  #[Rule('required', message: 'N° telephone est obligatoire.')]
+  #[Rule('numeric', message: 'Le numéro de téléphone ne doit contenir que des chiffres.')]  
+  public $phone;
+  #[Rule('required', message: 'Le champ adresse est obligatoire.')]
+  #[Rule('regex:/^[a-zA-Z0-9\s]+$/', message: 'Adresse doit contenir uniquement des majuscules, des chiffres et des espaces.')] 
+  public $adresse;
+  #[Rule('required', message: "La date d'embauche est obligatoire.")]
+  #[Rule('date_format:d/m/Y', message: "Le format de la date doit être JJ/MM/AAAA.")]
+  public $date_embauche;
+  #[Rule('required', message: "La date naissance est obligatoire.")]
+  #[Rule('date_format:d/m/Y', message: "Le format de la date doit être JJ/MM/AAAA.")]
   public $date_nais;
   #[Rule('required', message: 'Sexe est obligatoire')]
 
@@ -35,8 +34,9 @@ public $date_embauche;
   #[Rule('required', message: 'Situation famille est obligatoire')]
 
   public $sit_fam;
-  #[Rule('required', message: 'Email est obligatoire')]
-
+  #[Rule('nullable|email', message: [
+    'email' => 'Format email non valide'
+])]
   public $email;
   #[Rule('required', message: 'Fonction est obligatoire')]
 
@@ -44,20 +44,30 @@ public $date_embauche;
   #[Rule('required', message: 'Banque est obligatoire')]
 
   public $banque;
-  #[Rule('required', message: 'N° compte est obligatoire')]
+  #[Rule('required|numeric|digits:24')]
+  // #[Rule('integer', message: 'doit contenir que des entiers numeriques')]
+  // #[Rule('digits:24', message: 'doit contenir 24 chiffres')]
 
   public $num_compte;
-  #[Rule('required', message: 'Salaire est obligatoire')]
-
+  #[Rule('required|numeric|min:0|decimal:0,2')]
   public $salaire_base;
 #[Rule('required', message: 'Le champ cin est obligatoire.')]
 #[Rule('regex:/^[A-Z0-9\s]+$/', message: 'Le cin doit contenir uniquement des majuscules, des chiffres et des espaces.')] 
 
   public $cin;
   #[Rule('required', message: 'Categorieest obligatoire')]
-
   public $categ;
-
+public function messages(){
+  return[
+    'num_compte.required'=>'obligatoire',
+    'num_compte.numeric'=>'entiers',
+    'num_compte.digits'=>'24 chiffres',
+    'salaire_base.required' => 'Le salaire de base est obligatoire',
+    'salaire_base.numeric' => 'Le salaire de base doit être un nombre',
+    'salaire_base.min' => 'Le salaire de base doit être positif',
+    'salaire_base.decimal' => 'Le salaire de base doit avoir au maximum 2 chiffres après la virgule'
+  ];
+}
   // protected $rules = [
   //   'nom' => 'required',
   //   'prenom' => 'required',
@@ -134,26 +144,11 @@ public $date_embauche;
   }
   public function save()
   {
-    try {
-      $validatedData = $this->validate();
-
+    $validatedData = $this->validate();
+      //dd($validatedData);
       Personne::create($validatedData);
 
       $this->reset();
-      $this->dispatch('personne-created', [
-        'title' => 'Succès!',
-        'message' => 'La personne a été créée avec succès.',
-        'type' => 'success'
-      ]);
-    } catch (\Exception $e) {
-      if ($e instanceof \Illuminate\Validation\ValidationException) {
-        throw $e;
-      }
-      $this->dispatch('personne-created', [
-        'title' => 'Erreur!',
-        'message' => 'Une erreur est survenue lors de la création : ' . $e->getMessage(),
-        'type' => 'error'
-      ]);
-    }
+
   }
 }

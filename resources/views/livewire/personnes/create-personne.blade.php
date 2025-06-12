@@ -243,12 +243,6 @@
                         <option value="categorie1">Catégorie 1</option>
                         <option value="categorie2">Catégorie 2</option>
                         <option value="categorie3">Catégorie 3</option>
-                        <option value="categorie3">Catégorie 3</option>
-                        <option value="categorie3">Catégorie 3</option>
-                        <option value="categorie3">Catégorie 3</option>
-                        <option value="categorie3">Catégorie 3</option>
-                        <option value="categorie3">Catégorie 3</option>
-                        <option value="categorie3">Catégorie 3</option>
                       </select>
                     </div>
                     @error('categ')
@@ -350,7 +344,7 @@
                       </span>
                       <input id="salaire_base" type="number"
                         class="form-control @error('salaire_base') is-invalid @enderror" wire:model.live="salaire_base"
-                        step="0.01" min="0" placeholder="Entrez le salaire de base">
+                        step="0.01" min="0" placeholder="0.00">
                     </div>
                     @error('salaire_base')
                     <div class="invalid-feedback d-block">

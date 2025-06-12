@@ -5,12 +5,11 @@
 
   <div class="card-body">
     @if (session()->has('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-      {{ session('success') }}
-      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     @endif
-
     <form wire:submit="save">
       <div class="mb-3">
         <label class="form-label">Personne</label>
@@ -72,7 +71,7 @@
           @endif
         </div>
         @error('personne_id')
-        <div class="invalid-feedback">{{ $message }}</div>
+        <div class="invalid-feedback d-block">{{ $message }}</div>
         @enderror
       </div>
 
@@ -86,21 +85,21 @@
             <span class="input-group-text">DH</span>
           </div>
           @error('montant')
-          <div class="invalid-feedback">{{ $message }}</div>
+          <div class="invalid-feedback d-block">{{ $message }}</div>
           @enderror
         </div>
 
         <div class="col-8">
           <label class="form-label">Date de la sanction</label>
           <div class="input-group">
-            <input id="datepicker" wire:model="date_sanction"
+            <input id="datepicker" type="text"
               class="form-control @error('date_sanction') is-invalid @enderror" placeholder="JJ/MM/AAAA">
             <span class="input-group-text">
               <i class="fas fa-calendar"></i>
             </span>
           </div>
           @error('date_sanction')
-          <div class="invalid-feedback">{{ $message }}</div>
+          <div class="invalid-feedback d-block">{{ $message }}</div>
           @enderror
         </div>
       </div>
@@ -128,8 +127,10 @@
   $(document).ready(function(){
     flatpickr("#datepicker", {
       dateFormat: "d/m/Y",
+      allowInput: true,
       onChange: function(selectedDates, dateStr) {
-        $wire.set('date_sanction', dateStr);
+        $wire.set('date_sanction', dateStr === null ? '' : dateStr);
+
       }
     });
   })

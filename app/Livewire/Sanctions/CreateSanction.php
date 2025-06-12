@@ -12,12 +12,13 @@ class CreateSanction extends Component
     #[Rule('required', message: 'La personne est requise')]
     public $personne_id;
     
-    #[Rule('required|numeric|min:0', message: 'Le montant est requis et doit être positif')]
+    #[Rule('required', message: 'Le montant est requis')]
+    #[Rule('numeric', message: 'Le montant doit être positif')]
     public $montant;
     
-    #[Rule('required|date_format:d/m/Y', message: 'La date de sanction est requise')]
-    public $date_sanction;
-    
+  #[Rule('required', message: "La date sanction est obligatoire.")]
+  #[Rule('date_format:d/m/Y', message: "Le format de la date doit être JJ/MM/AAAA.")]
+  public $date_sanction;
     #[Rule('required|min:3', message: 'Le motif de la sanction est requis et doit contenir au moins 3 caractères')]
     public $motif_sanction;
     
@@ -76,6 +77,7 @@ class CreateSanction extends Component
             $this->selectedPersonne = $personne;
             $this->search = $personne->nom . ' ' . $personne->prenom;
             $this->personnes = [];
+            $this->resetValidation('personne_id');
         }
     }
 

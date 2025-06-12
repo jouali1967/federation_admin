@@ -63,21 +63,21 @@
                       class='form-control @error("date_nais") is-invalid @enderror' placeholder="JJ/MM/AAAA">
                   </div>
                   @error('date_nais')
-                  <div class="invalid-feedback">{{ $message }}</div>
+                  <div class="invalid-feedback d-block">{{ $message }}</div>
                   @enderror
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="form-group mb-2">
-                  <label for="phone" class="form-label mb-1">
+                  <label for="cin" class="form-label mb-1">
                     CIN <span class="text-danger">*</span>
                   </label>
                   <div class="input-group input-group-sm">
                     <span class="input-group-text">
                       <i class="fas fa-phone"></i>
                     </span>
-                    <input id="phone" type="tel" class="form-control @error('cin') is-invalid @enderror"
-                      wire:model.live="cin" placeholder="Ex: AA123456">
+                    <input id="cin" type="tel" class="form-control @error('cin') is-invalid @enderror"
+                      wire:model.live="cin" >
                   </div>
                   @error('cin')
                   <div class="invalid-feedback d-block">
