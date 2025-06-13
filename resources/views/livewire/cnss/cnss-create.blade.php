@@ -72,21 +72,21 @@
               class="form-control @error('num_cnss') is-invalid @enderror">
           </div>
           @error('num_cnss')
-          <div class="invalid-feedback">{{ $message }}</div>
+          <div class="invalid-feedback d-block">{{ $message }}</div>
           @enderror
         </div>
 
         <div class="col-8">
           <label class="form-label">Date d'inscription</label>
           <div class="input-group">
-            <input id="datepicker" wire:model="date_inscription"
+            <input id="datepicker" wire:model.live="date_inscription"
               class="form-control @error('date_inscription') is-invalid @enderror" placeholder="JJ/MM/AAAA">
             <span class="input-group-text">
               <i class="fas fa-calendar"></i>
             </span>
           </div>
           @error('date_inscription')
-          <div class="invalid-feedback">{{ $message }}</div>
+          <div class="invalid-feedback d-block">{{ $message }}</div>
           @enderror
         </div>
       </div>

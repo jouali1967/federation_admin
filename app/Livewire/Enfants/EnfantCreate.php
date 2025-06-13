@@ -74,6 +74,7 @@ class EnfantCreate extends Component
       $this->search = $personne->nom . ' ' . $personne->prenom;
       $this->personnes = [];
       $this->enfantsToDelete = [];
+      $this->resetValidation();
 
       $existingEnfants = Enfant::where('personne_id', $this->personne_id)->get();
       if ($existingEnfants->isNotEmpty()) {
@@ -104,6 +105,7 @@ class EnfantCreate extends Component
     $this->initializeEnfants(); // Reset enfants to one empty row
     // Dispatch an event to re-initialize datepickers after clearing
     $this->dispatch('enfants-cleared');
+    $this->resetValidation();
   }
 
   public function render()
@@ -174,5 +176,10 @@ class EnfantCreate extends Component
     $this->initializeEnfants();
     $this->enfantsToDelete = [];
     $this->dispatch('form-was-reset');
+  }
+
+  public function updated($propertyName)
+  {
+    $this->validateOnly($propertyName);
   }
 }

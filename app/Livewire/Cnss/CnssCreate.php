@@ -13,11 +13,15 @@ class CnssCreate extends Component
   public $personne_id;
 
 
-  #[Rule('required|date_format:d/m/Y', message: 'La date de inscription est requise')]
+  #[Rule('required', message: 'La date de inscription est requise')]
+  #[Rule('date_format:d/m/Y', message: "Le format de la date doit être JJ/MM/AAAA.")]
+
   public $date_inscription;
 
-  #[Rule('required|integer', message: 'Le n° CNSS est obligatoire et doit être un nombre entier.')]
+  #[Rule('required', message: 'Le n° CNSS est obligatoire.')]
+  #[Rule('integer', message: 'Le n° CNSS  doit être un nombre entier.')]
   public $num_cnss;
+  
   public $search = '';
   public $personnes = [];
   public $selectedPersonne = null;
@@ -27,6 +31,7 @@ class CnssCreate extends Component
     if ($this->selectedPersonne && $this->search !== $this->selectedPersonne->nom . ' ' . $this->selectedPersonne->prenom) {
       $this->selectedPersonne = null;
       $this->personne_id = null;
+      $this->resetValidation();
     }
 
     if (strlen($this->search) >= 2) {
@@ -67,6 +72,7 @@ class CnssCreate extends Component
     $this->personne_id = null;
     $this->personnes = [];
     $this->reset();
+    $this->resetValidation();
   }
 
 

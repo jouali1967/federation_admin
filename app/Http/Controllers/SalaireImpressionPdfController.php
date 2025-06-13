@@ -18,38 +18,48 @@ class SalaireImpressionPdfController extends Controller
       ->whereYear('date_virement', $annee)
       ->get();
 
-    $pdf = new ViremenetSalaire('P', 'mm', 'A4', true, 'UTF-8', false);
-    $pdf->AddPage();
+    $pdf = new ViremenetSalaire($mois,$annee,$orientation = 'P', $unit = 'mm', $format = 'A4', $unicode = true, $encoding = 'UTF-8', $diskcache = false);
+    $pdf->SetMargins(10, 6, 10);
+    $pdf->SetAutoPageBreak(true, 15);
 
-    // Titre
-    $pdf->Ln(2);
-    $pdf->SetFont('helvetica', '', 10);
-    $pdf->Cell(0, 8, 'Période : ' . str_pad($mois, 2, '0', STR_PAD_LEFT) . '/' . $annee, 0, 1, 'L');
-    $pdf->SetLineWidth(1); // Définir l'épaisseur de la ligne
-    $pdf->line(10, $pdf->GetY(), 200, $pdf->GetY());
-    $pdf->SetLineWidth(0.2); // Réinitialiser l'épaisseur de la ligne pour les autres éléments
-    $pdf->Ln(2);
+    $pdf->AddPage('P');
+    $pdf->SetY($pdf->getY()+12);
+    $compt = 1;
+    $tot_sb=0;
+    $tot_pr=0;
+    $tot_sa=0;
+    $tot_sm=0;
 
-    // En-tête du tableau avec fond de couleur et centrage vertical
-    $pdf->SetFont('helvetica', 'B', 8);
-    $pdf->SetFillColor(220, 220, 220); // gris clair
-    $pdf->MultiCell(60, 8, "Nom et Prénom", 1, 'C', 1, 0, null, null, true, 0, false, true, 8, 'M');
-    $pdf->MultiCell(20, 8, "Salaire de\nBase", 1, 'C', 1, 0, null, null, true, 0, false, true, 8, 'M');
-    $pdf->MultiCell(20, 8, "Montant\nPrimes", 1, 'C', 1, 0, null, null, true, 0, false, true, 8, 'M');
-    $pdf->MultiCell(20, 8, "Montant\nSanctions", 1, 'C', 1, 0, null, null, true, 0, false, true, 8, 'M');
-    $pdf->MultiCell(20, 8, "Salaire\nMensuel", 1, 'C', 1, 0, null, null, true, 0, false, true, 8, 'M');
-    $pdf->MultiCell(40, 8, "N° Compte", 1, 'C', 1, 1, null, null, true, 0, false, true, 8, 'M');
 
     // Lignes du tableau avec centrage vertical
+    $count_pers=count($salaires);
     $pdf->SetFont('helvetica', '', 8);
     foreach ($salaires as $salaire) {
+      $pdf->setX(6);
       $pdf->MultiCell(60, 5, $salaire->personne->nom . ' ' . $salaire->personne->prenom, 1, 'L', 0, 0, null, null, true, 0, false, true, 0, 'M');
       $pdf->MultiCell(20, 5, $salaire->salaire_base, 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
       $pdf->MultiCell(20, 5, $salaire->montant_prime, 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
       $pdf->MultiCell(20, 5, $salaire->montant_sanction, 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
       $pdf->MultiCell(20, 5, $salaire->montant_vire, 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
       $pdf->MultiCell(40, 5, $salaire->personne->num_compte, 1, 'R', 0, 1, null, null, true, 0, false, true, 5, 'M');
+      $tot_sb += $salaire->salaire_base;
+      $tot_pr += $salaire->montant_prime;
+      $tot_sa += $salaire->montant_sanction;
+      $tot_sm += $salaire->montant_vire;
+        $compt++;
+        $count_pers=$count_pers-1;
+        if ($pdf->GetY() + 10 > ($pdf->getPageHeight() - $pdf->getFooterMargin()) and $count_pers<5) {
+            $pdf->AddPage();
+        }
+
     }
+    $pdf->setX(6);
+    $pdf->MultiCell(60, 5, 'Total', 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
+    $pdf->MultiCell(20, 5, number_format($tot_sb,2,'.',' '), 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
+    $pdf->MultiCell(20, 5, number_format($tot_pr,2,'.',' '), 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
+    $pdf->MultiCell(20, 5, number_format($tot_sa,2,'.',' '), 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
+    $pdf->MultiCell(20, 5, number_format($tot_sm,2,'.',' '), 1, 'R', 0, 0, null, null, true, 0, false, true, 5, 'M');
+
 
     $pdf->Output('etat_salaires.pdf');
   }

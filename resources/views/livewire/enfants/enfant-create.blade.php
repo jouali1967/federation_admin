@@ -108,13 +108,13 @@
             </td>
             <td>
               <div class="input-group">
-                <input id="datepicker_{{ $index }}" wire:model="enfants.{{ $index }}.date_nais" class="form-control @error(sprintf('enfants.%s.date_nais', $index)) is-invalid @enderror" placeholder="JJ/MM/AAAA">
+                <input id="datepicker_{{ $index }}" wire:model.live="enfants.{{ $index }}.date_nais" class="form-control @error(sprintf('enfants.%s.date_nais', $index)) is-invalid @enderror" placeholder="JJ/MM/AAAA">
                 <span class="input-group-text">
                   <i class="fas fa-calendar"></i>
                 </span>
               </div>
               @error(sprintf('enfants.%s.date_nais', $index))
-              <div class="invalid-feedback">{{ $message }}</div>
+              <div class="invalid-feedback d-block">{{ $message }}</div>
               @enderror
             </td>
             <td>

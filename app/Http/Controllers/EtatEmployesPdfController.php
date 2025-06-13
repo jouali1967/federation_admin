@@ -35,20 +35,20 @@ class EtatEmployesPdfController extends Controller
     );
     $totalSalaires = 0;
     $compteur = 1;
-    $count_pers = count($datas);
+    $count_pers = count($employes);
     // Ajout des données des employés
-    foreach ($datas as $data) {
+    foreach ($employes as $employe) {
       $pdf->SetX(5);
       $pdf->SetFont('helvetica', '', 8);
       // Données
       $pdf->Cell(15, 6, $compteur, 1, 0, 'C', false);
-      $pdf->Cell(45, 6, mb_strtoupper($data['nom'] . ' ' . $data['prenom'], 'UTF-8'), 1, 0, 'L', false);
-      $pdf->Cell(25, 6, $data['fonction'] ?: '-', 1, 0, 'L', false);
-      $pdf->Cell(20, 6, $data['sexe'] ?: '-', 1, 0, 'C', false);
-      $pdf->Cell(25, 6, $data['date_embauche'] ?: '-', 1, 0, 'C', false);
-      $pdf->Cell(30, 6, $data['phone'] ?: '-', 1, 0, 'C', false);
-      $pdf->Cell(25, 6, number_format($data['salaire_base'], 0, ',', ' ') . ' DH', 1, 1, 'R', false);
-      $totalSalaires += $data['salaire_base'] ?: 0;
+      $pdf->Cell(45, 6, mb_strtoupper($employe->nom . ' ' . $employe->prenom, 'UTF-8'), 1, 0, 'L', false);
+      $pdf->Cell(25, 6, $employe->fonction ?: '-', 1, 0, 'L', false);
+      $pdf->Cell(20, 6, $employe->sexe ?: '-', 1, 0, 'C', false);
+      $pdf->Cell(25, 6, $employe->date_embauche ?: '-', 1, 0, 'C', false);
+      $pdf->Cell(30, 6, $employe->phone ?: '-', 1, 0, 'C', false);
+      $pdf->Cell(25, 6, number_format($employe->salaire_base, 2, ',', ' ') . ' DH', 1, 1, 'R', false);
+      $totalSalaires += $employe->salaire_base ?: 0;
       $compteur++;
       $count_pers = $count_pers - 1;
       if ($pdf->GetY() + 45 > ($pdf->getPageHeight() - $pdf->getFooterMargin()) and $count_pers < 5) {
@@ -57,7 +57,7 @@ class EtatEmployesPdfController extends Controller
     }
     $pdf->SetX(5);
     $pdf->Cell(160, 6, 'total', 1 , 0, 'R', false);
-    $pdf->Cell(25, 6, number_format($totalSalaires, 0, ',', ' ') . ' DH', 1, 1, 'R', false);
+    $pdf->Cell(25, 6, number_format($totalSalaires, 2, ',', ' ') . ' DH', 1, 1, 'R', false);
 
     // Ajout des signatures
     $pdf->addSignatures($nom1, $nom2);

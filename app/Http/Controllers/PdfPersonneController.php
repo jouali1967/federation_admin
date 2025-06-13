@@ -37,8 +37,9 @@ public function generate(Request $request)
 
     // Hauteur d’une ligne
     $lineHeight = 6;
-    $count_pers=count($data);
     $personnes= personne::all();
+    $count_pers=count($personnes);
+
     foreach ($personnes as $personne) {
         // Données
         $pdf->SetFont('times', '', 8);

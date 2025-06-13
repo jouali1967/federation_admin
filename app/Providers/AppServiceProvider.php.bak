@@ -21,13 +21,13 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-public function boot(): void
-{
-    Schema::defaultStringLength(191);
-    Livewire::setUpdateRoute(function ($handle) {
-        return Route::post('/federation/public/livewire/update', $handle);
-    });
-    
-    View::composer('components.layouts.app', NavLinkComposer::class);
-}
+    public function boot(): void
+    {
+        Schema::defaultStringLength(191);
+        Livewire::setUpdateRoute(function ($handle) {
+          return Route::post(uri: '/federation/public/livewire/update', $handle);
+        });
+
+        View::composer('components.layouts.app', NavLinkComposer::class);
+    }
 }
