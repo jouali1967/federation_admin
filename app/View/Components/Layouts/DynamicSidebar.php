@@ -83,7 +83,8 @@ class DynamicSidebar extends Component
                     'icon' => 'bi bi-graph-up-arrow',
                     'route_group_pattern' => ['augmentations.*'],
                     'items' => [
-                        'augmentations.create' => ['title' => 'Augmentations'],
+                        'augmentations.create' => ['title' => 'Ajout Augmentation'],
+                        'augmentations.index' => ['title' => 'Liste Augmentations'],
                     ],
                     'order' => 6,
                 ],

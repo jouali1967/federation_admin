@@ -66,4 +66,7 @@ class Personne extends Model
   public function enfants(){
     return $this->hasMany(Enfant::class);
   }
+  public function augmentations(){
+    return $this->hasMany(Augmentation::class);
+  }
 }

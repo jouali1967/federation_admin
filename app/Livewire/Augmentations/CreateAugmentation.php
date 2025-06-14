@@ -72,7 +72,6 @@ class CreateAugmentation extends Component
         $nouveau = $this->type === 'fixe'
             ? $ancien + $this->valeur
             : $ancien * (1 + $this->valeur / 100);
-
         Augmentation::create([
             'personne_id' => $personne->id,
             'type' => $this->type,

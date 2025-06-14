@@ -3,6 +3,7 @@
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\RoleManagement;
 use App\Livewire\Admin\UserManagement;
+use App\Livewire\Augmentations\ListAugmentation;
 use App\Livewire\HomePage;
 use App\Livewire\Cnss\CnssCreate;
 use App\Livewire\Primes\EditPrime;
@@ -63,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
   //enfants
   Route::get('/enfants/create', EnfantCreate::class)->name('enfants.create')->middleware('permission:enfants.create');
   //contributions
+  Route::get('/augmentations', ListAugmentation::class)->name('augmentations.index')->middleware('permission:augmentations.index');
   Route::get('/augmentations/create', CreateAugmentation::class)->name('augmentations.create')->middleware('permission:augmentations.create');
   //editions
   Route::get('/generate-pdf', [PdfPersonneController::class, 'generate'])->name('generate.pdf')->middleware('permission:generate.pdf');
