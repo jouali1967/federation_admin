@@ -115,6 +115,7 @@
   $(document).ready(function(){
     flatpickr("#date_aug", {
       dateFormat: "d/m/Y",
+      locale: 'fr',
       onChange: function(selectedDates, dateStr) {
         $wire.set('date_aug', dateStr);
       }

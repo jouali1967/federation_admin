@@ -43,6 +43,7 @@ class ListAugmentation extends Component
     $this->type = $augmentation->type;
     $this->personne_id = $augmentation->personne_id;
     $this->showEditModal = true;
+    $this->dispatch('showModal');
   }
 
   public function update()
@@ -69,18 +70,18 @@ class ListAugmentation extends Component
     // $resul=Augmentation::first();
     // dd($resul);
     $augmentation = Augmentation::findOrFail($id);
-    $personne_id=$augmentation->personne_id;
+    $personne_id = $augmentation->personne_id;
     $augmentation->delete();
-    $employe=Personne::find($personne_id);
-    $salaire_base_hist=$employe->salaire_base_hist;
-    $personnes=Augmentation::where('personne_id',$personne_id)
-                ->orderBy('id')->get();
-    $mont_init=0;
-    $tot_mont_aug=0;
+    $employe = Personne::find($personne_id);
+    $salaire_base_hist = $employe->salaire_base_hist;
+    $personnes = Augmentation::where('personne_id', $personne_id)
+      ->orderBy('id')->get();
+    $mont_init = 0;
+    $tot_mont_aug = 0;
     foreach ($personnes as $augmentation) {
-      $augmentation->ancien_salaire =  $salaire_base_hist+$mont_init;
+      $augmentation->ancien_salaire =  $salaire_base_hist + $mont_init;
       $augmentation->nouveau_salaire = $augmentation->ancien_salaire + $augmentation->valeur;
-      $mont_init=$augmentation->valeur;
+      $mont_init = $augmentation->valeur;
       $tot_mont_aug += $augmentation->valeur;
       $augmentation->save();
     }

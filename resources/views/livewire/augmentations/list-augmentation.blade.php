@@ -84,7 +84,20 @@
             </div>
             <div class="mb-3">
               <label class="form-label">Date</label>
-              <input type="text" id="date_aug" wire:model="date_aug" class="form-control">
+              <div class="input-group">
+                <input type="text" id="date_aug" wire:model.live="date_aug" class="form-control flatpickr-input" x-data
+                  x-init="flatpickr($el, {
+                  dateFormat: 'd/m/Y',
+                  locale: 'fr',
+                  allowInput: true,
+                  onChange: function(selectedDates, dateStr) {
+                    $wire.set('date_aug', dateStr)
+                  }
+                })">
+                <span class="input-group-text">
+                  <i class="fas fa-calendar"></i>
+                </span>
+              </div>
               @error('date_aug') <span class="text-danger">{{ $message}}</span> @enderror
             </div>
             <div class="mb-3">
@@ -104,15 +117,3 @@
   <div class="modal-backdrop fade show"></div>
   @endif
 </div>
-@script()
-<script>
-  $(document).ready(function(){
-    flatpickr("#date_aug", {
-      dateFormat: "d/m/Y",
-      onChange: function(selectedDates, dateStr) {
-        $wire.set('date_aug', dateStr);
-      }
-    });
-  })
-</script>
-@endscript

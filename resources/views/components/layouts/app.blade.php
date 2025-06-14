@@ -13,9 +13,10 @@
     content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS." />
   <meta name="keywords"
     content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard" />
-     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+  {{--
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     integrity="sha256-9kPW/n5nn53j4WMRYAxe9c1rCY96Oogo/MKSVdKzPmI=" crossorigin="anonymous" /> --}}
-  <link rel="stylesheet" href="{{ asset('assets/bootstrap-icons/bootstrap-icons.min.css') }}"/>
+  <link rel="stylesheet" href="{{ asset('assets/bootstrap-icons/bootstrap-icons.min.css') }}" />
   <link rel="stylesheet" href="{{ asset('dist/datepicker/flatpickr.min.css') }}">
   <link rel="stylesheet" href="{{ asset('dist/datepicker/monthSelectStyle.css') }}">
   <link href="{{ asset('dist/css/select2.min.css') }}" rel="stylesheet" />
@@ -225,6 +226,7 @@
   <script src="{{ asset('dist/js/bootstrap.bundle.min.js') }}"> </script>
   <script src="{{ asset('assets/fontawesome/fontaesome6-3-0.js') }}" crossorigin="anonymous"></script>
   <script src="{{ asset('dist/datepicker/flatpickr.min.js') }}"></script>
+  <script src="{{ asset('dist/datepicker/l10n/fr.js') }}"></script>
   <script src="{{ asset('dist/js/monthSelectIndex.js') }}"></script>
   <script src="{{ asset('dist/js/select2.min.js') }}"></script>
 
